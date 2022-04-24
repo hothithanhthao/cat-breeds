@@ -1,0 +1,71 @@
+# This is the docker-compose-yml file that starts the app.
+
+version: "3"
+
+services:
+  # Frontend service
+  # frontend:
+  #   image: frontend
+  #   build:
+  #     dockerfile: Dockerfile
+  #     context: ./frontend
+  #   ports:
+  #     - $REACT_LOCAL_PORT:$REACT_DOCKER_PORT
+  #   volumes: 
+  #     - ./frontend:/usr/src/app/frontend
+  #     - /usr/src/app/frontend/node_modules
+  #   networks:
+  #     - frontend
+
+  # Backend service
+  backend:
+    image: backend
+    depends_on:
+      - mysqldb
+    build:
+      dockerfile: Dockerfile
+      context: ./backend
+    env_file: .env
+    ports:
+      - $NODE_LOCAL_PORT:$NODE_DOCKER_PORT
+    environment:
+      - DB_HOST=mysqldb
+      - DB_USER=$MYSQLDB_USER
+      - DB_PASSWORD=$MYSQLDB_ROOT_PASSWORD
+      - DB_NAME=$MYSQLDB_DATABASE
+      - DB_PORT=$MYSQLDB_DOCKER_PORT
+      - CLIENT_ORIGIN=$CLIENT_ORIGIN
+    volumes:
+      - ./backend:/usr/src/app/backend/server-a
+      - /usr/src/app/backend/server-a/node_modules
+    networks:
+      - backend
+      # - frontend
+    restart: unless-stopped
+
+  #database:
+  mysqldb:
+    image: mysql
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      - MYSQL_ROOT_PASSWORD=$MYSQLDB_ROOT_PASSWORD
+      - MYSQL_DATABASE=$MYSQLDB_DATABASE
+    ports:
+      - $MYSQLDB_LOCAL_PORT:$MYSQLDB_DOCKER_PORT
+    volumes:
+      - ./backend/db:/docker-entrypoint-initdb.d
+      - db:/var/lib/mysql
+    networks:
+      - backend
+
+# The network that all the backend components must be added to 
+# for them to be able to communicate through exposed ports.
+networks:
+  backend:
+  frontend:
+
+# Volumes are used to store information
+# Documentation: https://docs.docker.com/storage/volumes/
+volumes:
+  db:

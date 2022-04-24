@@ -1,0 +1,21 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "Backend APIs that allows to add a new cat which has name, id , breed group and weight.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "cat",
+    "breeds"
+  ],
+  "author": "Thao Ho",
+  "license": "ISC",
+  "dependencies": {
+    "connect": "^3.7.0",
+    "dotenv": "^16.0.0",
+    "mysql2": "^2.3.3",
+    "swagger-tools": "^0.10.4"
+  }
+}
