@@ -30,7 +30,6 @@ module.exports.getCats = function paginationCats(req, res, next) {
     let pageNumber = req.swagger.params['page'].value;
     Cat.paginationCats(pageNumber)
         .then(function (response) {
-            console.log(response);
             utils.writeJson(res, response);
         })
         .catch(function (response) {

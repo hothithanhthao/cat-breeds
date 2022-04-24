@@ -53,17 +53,19 @@ exports.paginationCats = function (pageNumber) {
         const offset = (pageNumber - 1) * limit;
         let selectPaginationQuery = `SELECT * FROM Cats LIMIT ${limit} OFFSET ${offset}`;
         db.query(selectPaginationQuery, (err, results) => {
-            console.log(results);
             const cats = results.map(result => helpers.getCatObject(result));
             const sortedCats = cats.sort(helpers.sortCatsByName)
-            let totalCatsPerPage = {
+            if (err) throw err;
+            if (results.length === 0) reject({
+                "cats_per_page": cats.length,
+                "page_number": pageNumber,
+                "total_cats": []
+            })
+            else resolve({
                 "cats_per_page": cats.length,
                 "page_number": pageNumber,
                 "total_cats": sortedCats
-            }
-            if (err) throw err;
-            if (results.length === 0) reject([])
-            else resolve(totalCatsPerPage);
+            });
         })
     })
 }
