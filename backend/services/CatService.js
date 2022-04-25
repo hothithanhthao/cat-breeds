@@ -15,8 +15,10 @@ exports.addCat = function (cat) {
         db.query(insertQuery, (err, results) => {
             if (err) throw err;
             if (results.length === 0) reject([])
-            else resolve(cat);
-            console.log("1 record inserted");
+            else {
+                resolve(cat);
+                console.log("1 record inserted");
+            }
         })
     });
 }
@@ -33,7 +35,7 @@ exports.getCatById = function (catId) {
     return new Promise(function (resolve, reject) {
         let selectQuery = `SELECT *  FROM Cats  WHERE Cats.catId = ${catId}`;
         db.query(selectQuery, (err, results) => {
-            const cat = results.map(result => getCatObject(result));
+            const cat = results.map(result => helpers.getCatObject(result));
             if (err) throw err;
             if (results.length === 0) reject(`No cat with id: ${catId} found!`)
             else resolve(cat);
@@ -84,8 +86,10 @@ exports.updateCat = function (catId, catInfo) {
         db.query(updateCatQuery, (err, results) => {
             if (err) throw err;
             if (results.length === 0) reject([])
-            else resolve(results);
-            console.log("1 record updated");
+            else {
+                resolve(results);
+                console.log("1 record updated");
+            }
         });
     });
 };
@@ -103,8 +107,10 @@ exports.deleteCat = function (catId) {
         db.query(deleteCatQuery, (err, results) => {
             if (err) throw err;
             if (results.length === 0) reject([])
-            else resolve(results);
-            console.log("1 record deleted");
+            else {
+                resolve(results);
+                console.log("1 record deleted");
+            }
         })
     })
 }
